@@ -7,4 +7,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
+      <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
+    </ItemGroup>
+
 </Project>
