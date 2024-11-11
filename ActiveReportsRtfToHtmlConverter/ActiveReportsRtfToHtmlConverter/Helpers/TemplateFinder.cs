@@ -45,6 +45,6 @@ public static class TemplateFinder
 
     private static string GetNewFieldName(string name)
     {
-        return name[..^4] + ".HTML";
+        return name[..^4] + ".Html";
     }
 }

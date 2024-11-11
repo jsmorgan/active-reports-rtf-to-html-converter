@@ -8,6 +8,9 @@ namespace ActiveReportsRtfToHtmlConverter.Helpers;
 
 public static class ResourceReader
 {
+    private const string DocOpening = "<html><body>";
+    private const string DocClosing = "</body></html>";
+    
     public static FileResult ProcessFile(FileInfo file)
     {
         var result = new FileResult() { FileName = file.Name };
@@ -36,9 +39,12 @@ public static class ResourceReader
                             var shortenedContent = rtfContent.Length > 64 ? rtfContent[..63] : rtfContent;
                             Console.WriteLine($"Replacing: {nodeNameWithoutExtension} - {shortenedContent}...");
 
-                            var newNode = document.CreateElement(nodeNameWithoutExtension + ".HTML");
+                            var newNode = document.CreateElement("data");
+                            newNode.SetAttribute("name", nodeNameWithoutExtension + ".Html");
                             var html = Rtf.ToHtml(rtfContent);
-                            newNode.InnerText = html;
+                            var value = document.CreateElement("value");
+                            value.InnerText = DocOpening + html + DocClosing;
+                            newNode.AppendChild(value);
                             var parent = oldNode.ParentNode;
                             parent?.ReplaceChild(newNode, oldNode);
                         }
