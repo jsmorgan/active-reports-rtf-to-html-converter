@@ -52,7 +52,7 @@ public static class ResourceReader
                     }
                 }
 
-                if (file.DirectoryName != null) document.Save(result.FileName);
+                if (file.DirectoryName != null) document.Save(file.FullName);
             }
               
             // This found something to update, now find in corresponding template or base report file

@@ -57,8 +57,8 @@ foreach (var template in totals)
 
 var timespan = DateTime.Now - startTime;
 LogHelper.LogWithTimestamp($"Run completed, total processing time was: {timespan}.");
-LogHelper.LogWithTimestamp($"{rtfFieldCount} RTF fields found across {resxChanged} resource files out of {resxFiles.Count}.");
+LogHelper.LogWithTimestamp($"{rtfFieldCount} RTF fields found across {resxChanged} resource files out of {resxFiles.Count} resx files.");
 LogHelper.LogWithTimestamp($"{designerFileReferences} RTF references found across {designerFilesChanged} designer files.");
-LogHelper.LogWithTimestamp($"{baseFileReferences} RTF references found across {baseFilesChanged} designer files.");
+LogHelper.LogWithTimestamp($"{baseFileReferences} RTF references found across {baseFilesChanged} code behind files.");
 
 
