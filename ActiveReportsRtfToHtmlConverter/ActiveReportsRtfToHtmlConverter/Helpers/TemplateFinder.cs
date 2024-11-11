@@ -5,26 +5,46 @@ namespace ActiveReportsRtfToHtmlConverter.Helpers;
 
 public static class TemplateFinder
 {
-    public static List<FileResult> ReplaceInTemplateFiles(FileInfo file, FileResult fileResults)
+    public static void ReplaceInTemplateFiles(FileInfo file, FileResult fileResults)
     {
-        var results = new List<FileResult>();
-
         var templates = FileHelper.GetRelatedTemplateFiles(file);
-        int i = 0;
         foreach (var template in templates)
         {
-            string content = File.ReadAllText(template.FullName);
+            var content = File.ReadAllText(template.FullName);
+            
+            LogHelper.LogWithTimestamp($"Looking in {template.FullName} for references.");
             foreach (var rtfField in fileResults.RtfFields)
             {
-                var newFieldName = rtfField[..^4] + ".HTML";
-                string updatedContent = Regex.Replace(content, Regex.Escape(rtfField), newFieldName);
-                content = updatedContent;
+                var count = 0;
+                var newFieldName = GetNewFieldName(rtfField);
+                var updatedContent = Regex.Replace(content, Regex.Escape(rtfField), match =>
+                {
+                    count++;
+                    return newFieldName;
+                });
+                if (count > 0)
+                {
+                    LogHelper.LogWithTimestamp($"Found {count} references of {rtfField}.");
+                    content = updatedContent;
+                        
+                    if (template.FullName.EndsWith(".designer.cs"))
+                        fileResults.DesignerReferences.Add(rtfField, count);
+                        
+                    if (template.FullName.EndsWith(".cs"))
+                        fileResults.BaseReferences.Add(rtfField, count);
+                }
+                else
+                {
+                    LogHelper.LogWithTimestamp($"Nothing found for {rtfField}.");
+                }
             }
-            File.WriteAllText($"{template.DirectoryName}/test{i++}.cs", content);
+            
+            File.WriteAllText(template.FullName, content);
         }
-        
+    }
 
-
-        return results;
+    private static string GetNewFieldName(string name)
+    {
+        return name[..^4] + ".HTML";
     }
 }

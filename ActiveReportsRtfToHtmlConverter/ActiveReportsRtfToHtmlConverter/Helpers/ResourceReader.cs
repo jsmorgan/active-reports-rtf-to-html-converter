@@ -34,7 +34,7 @@ public static class ResourceReader
                             result.RtfFields.Add(nodeName);
                             var rtfContent = oldNode.InnerText;
                             var shortenedContent = rtfContent.Length > 64 ? rtfContent[..63] : rtfContent;
-                            Console.WriteLine($"Replacing: {nodeNameWithoutExtension} - {shortenedContent}");
+                            Console.WriteLine($"Replacing: {nodeNameWithoutExtension} - {shortenedContent}...");
 
                             var newNode = document.CreateElement(nodeNameWithoutExtension + ".HTML");
                             var html = Rtf.ToHtml(rtfContent);
@@ -46,25 +46,33 @@ public static class ResourceReader
                     catch (Exception e)
                     {
                         result.Error = e.Message;
-                        
+                        LogHelper.LogWithTimestamp(e.Message);
                         // error occurred, break out of processing this file.
                         break;
                     }
                 }
 
-                if (file.DirectoryName != null) document.Save(Path.Combine(file.DirectoryName, "test.resx"));
+                if (file.DirectoryName != null) document.Save(result.FileName);
             }
               
             // This found something to update, now find in corresponding template or base report file
             if (result.RtfFields.Count > 0)
             {
-                var templatesFixed = TemplateFinder.ReplaceInTemplateFiles(file, result);
+                try
+                {
+                    TemplateFinder.ReplaceInTemplateFiles(file, result);
+                }
+                catch (Exception e)
+                {
+                    result.Error = e.Message;
+                    LogHelper.LogWithTimestamp(e.Message);
+                }
             }
         }
         catch (Exception e)
         {
             result.Error = e.Message;
-            Console.WriteLine(e.ToString());
+            LogHelper.LogWithTimestamp(e.Message);
         }
 
         return result;
