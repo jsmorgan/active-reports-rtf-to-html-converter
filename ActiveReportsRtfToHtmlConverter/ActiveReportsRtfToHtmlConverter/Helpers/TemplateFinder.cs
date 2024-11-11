@@ -27,10 +27,10 @@ public static class TemplateFinder
                     LogHelper.LogWithTimestamp($"Found {count} references of {rtfField}.");
                     content = updatedContent;
                         
-                    if (template.FullName.EndsWith(".designer.cs"))
+                    if (template.FullName.EndsWith(".designer.cs", StringComparison.InvariantCultureIgnoreCase))
                         fileResults.DesignerReferences.Add(rtfField, count);
                         
-                    if (template.FullName.EndsWith(".cs"))
+                    if (template.FullName.EndsWith(".cs", StringComparison.InvariantCultureIgnoreCase))
                         fileResults.BaseReferences.Add(rtfField, count);
                 }
                 else
