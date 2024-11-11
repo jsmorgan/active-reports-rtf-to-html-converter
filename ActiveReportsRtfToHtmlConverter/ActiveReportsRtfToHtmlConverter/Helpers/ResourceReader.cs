@@ -54,15 +54,12 @@ public static class ResourceReader
 
                 if (file.DirectoryName != null) document.Save(Path.Combine(file.DirectoryName, "test.resx"));
             }
-            
-            // // If there were changes save the file
-            // if (output.Duplicates > 0)
-            // {
-            //     rootDoc.Save(fileInfo.FullName);
-            //     SummarizeFile(output);
-            // }
-            // else
-            //     NoFileChanges(output);
+              
+            // This found something to update, now find in corresponding template or base report file
+            if (result.RtfFields.Count > 0)
+            {
+                var templatesFixed = TemplateFinder.ReplaceInTemplateFiles(file, result);
+            }
         }
         catch (Exception e)
         {
