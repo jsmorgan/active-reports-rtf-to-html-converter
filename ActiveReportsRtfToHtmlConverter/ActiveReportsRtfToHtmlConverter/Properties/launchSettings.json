@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ActiveReportsRtfToHtmlConverter": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\temp\\resx"
+    }
+  }
+}
